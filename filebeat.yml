@@ -1,12 +1,30 @@
-filebeat.inputs:
-- type: container
-  paths:
-    - '/var/lib/docker/containers/*/*.log'
-  processors:
-    - add_docker_metadata: ~
 
-output.logstash:
-  hosts: ["logstash:5044"]
+filebeat.inputs:
+  - type: log
+    enabled: true
+    paths:
+      - /logs/*.log       # Mounted folder from Windows host
+    processors:
+      - add_host_metadata: ~
+      - add_cloud_metadata: ~
+
+output.elasticsearch:
+  hosts: ["http://host.docker.internal:9200"]
+  username: "${ELASTICSEARCH_USERNAME}"   # Use Jenkins credentials
+  password: "${ELASTICSEARCH_PASSWORD}"   # Use Jenkins credentials
+
+setup.kibana:
+  host: "http://host.docker.internal:5601"  # Optional: for dashboards in Kibana
+  
+# filebeat.inputs:
+# - type: container
+#   paths:
+#     - '/var/lib/docker/containers/*/*.log'
+#   processors:
+#     - add_docker_metadata: ~
+
+# output.logstash:
+#   hosts: ["logstash:5044"]
   # Or output.elasticsearch if you're not using Logstash
   # output.elasticsearch:
   #   hosts: ["elasticsearch:9200"]

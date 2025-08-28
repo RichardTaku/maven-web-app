@@ -10,4 +10,4 @@ RUN chown root /usr/share/filebeat/filebeat.yml
 RUN chmod go-w /usr/share/filebeat/filebeat.yml
 
 # Tell Filebeat to run with your custom config
-ENTRYPOINT ["filebeat", "-e", "-c", "/usr/share/filebeat/filebeat.yml"]
+ENTRYPOINT ["filebeat", "-e", "-strict.perms=false", "-c", "/usr/share/filebeat/filebeat.yml"]

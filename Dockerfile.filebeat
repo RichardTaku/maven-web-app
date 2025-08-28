@@ -1,0 +1,13 @@
+# Use a slim Filebeat base image
+FROM docker.elastic.co/beats/filebeat:8.15.0
+
+# Copy your custom Filebeat configuration into the container
+COPY filebeat.yml /usr/share/filebeat/filebeat.yml
+
+# Set permissions for the config file
+USER root
+RUN chown root /usr/share/filebeat/filebeat.yml
+RUN chmod go-w /usr/share/filebeat/filebeat.yml
+
+# Tell Filebeat to run with your custom config
+ENTRYPOINT ["filebeat", "-e", "-c", "/usr/share/filebeat/filebeat.yml"]
